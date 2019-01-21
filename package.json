@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf lib && webpack --config webpack.config.babel.js",
-    "pub": "npm run build && git add . && git commit -m 'working code' && git push && npm version patch -m 'upgrade to %s while working code' && npm publish"
+    "pub": "npm run build && git add . && git commit -m 'working code' && npm version patch -m 'upgrade to %s while working code' && git push && npm publish"
   },
   "repository": {
     "type": "git",
