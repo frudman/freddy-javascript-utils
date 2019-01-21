@@ -53,4 +53,4 @@ export function genCombinations_with_callback(options, cb) {
     }
 }
 
-export const pi = 3.14233;
+export const pi = 3.1423355;
