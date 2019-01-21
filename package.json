@@ -1,6 +1,6 @@
 {
   "name": "tidbits",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
   "main": "lib/umd/es6/index.min.js",
   "browser": "lib/umd/es6/index.min.js",
