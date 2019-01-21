@@ -5,6 +5,7 @@
 // IMPORTANT: Webpack config below uses ES6 modules 
 // - based on https://stackoverflow.com/a/51774289
 // - this DEPENDS on webpack config file using the .babel.js extension
+//  - also as per: https://stackoverflow.com/a/31906902
 //  - it seems you DO NEED the .babel.js extension (unlike the addtl note in SO answer above)
 // - no need for a separate .babelrc file as babel settings are directly in package.json file
 
@@ -59,6 +60,12 @@ const baseBuildConfig = {
     entry: './utils.js',
     output: { 
         path: __dirname, 
+
+        // IMPORTANT: globalObject as per below else 'window' will be used and this fails when
+        // trying to import in a node app (e.g. another webpack config file)
+        // as per: https://github.com/webpack/webpack/issues/6525#issuecomment-417580843
+        // also: https://github.com/webpack/webpack/issues/6522#issuecomment-366708234
+        globalObject: `typeof self !== 'undefined' ? self : this`, // replaces default of 'window' (for webpack 4)
     }, 
     optimization: {
         minimize: false, // parms below will update this
