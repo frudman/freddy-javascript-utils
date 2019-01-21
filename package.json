@@ -1,13 +1,13 @@
 {
   "name": "tidbits",
-  "version": "1.0.9",
+  "version": "1.0.5",
   "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
   "main": "lib/umd/es6/index.min.js",
   "module": "utils.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf lib && webpack --config webpack.config.babel.js",
-    "pub": "npm run build && npm version patch -m 'upgrade to %s while working code' && git add . && git commit -m 'working code' && git push && npm publish"
+    "pub": "npm run build && git add . && git commit -m 'working code' && git push && npm version patch -m 'upgrade to %s while working code' && npm publish"
   },
   "repository": {
     "type": "git",

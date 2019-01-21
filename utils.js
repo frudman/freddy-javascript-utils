@@ -52,3 +52,5 @@ export function genCombinations_with_callback(options, cb) {
         propAlts.forEach(v => genCombos(otherProps, subAlts => cb(Object.assign({ [thisProp]: v }, subAlts))))
     }
 }
+
+export const pi = 3.1423;
