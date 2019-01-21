@@ -1,6 +1,8 @@
 
 // These tidbits CANNOT contain ANY dependencies: that's the whole point of this module :-) 
 
+// A fine way to use any of these functions is to simply cut-and-paste them into your code (use this repo as reference)
+
 // helper
 export const deepClone = obj => JSON.parse(JSON.stringify(obj));
 

@@ -3,7 +3,8 @@
   "version": "1.0.14",
   "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
   "main": "lib/umd/es6/index.min.js",
-  "module": "utils.js",
+  "browser": "lib/umd/es6/index.min.js",
+  "module": "utils.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf lib && webpack --config webpack.config.babel.js",
