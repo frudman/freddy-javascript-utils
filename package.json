@@ -1,7 +1,7 @@
 {
   "name": "tidbits",
   "version": "1.0.1",
-  "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits",
+  "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
   "main": "utils.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
