@@ -5,7 +5,7 @@
   "main": "utils.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf lib && webpack --config webpack.config.js",
+    "build": "rm -rf lib && webpack --config webpack.config.babel.js",
     "pub": "npm run build && git add . && git commit -m 'working code' && git push && npm version patch -m 'upgrade to %s while working code' && npm publish"
   },
   "repository": {
@@ -24,7 +24,20 @@
   },
   "homepage": "https://github.com/frudman/freddy-javascript-utils#readme",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1"
+  },
+  "babel": {
+    "presets": [
+        [
+            "@babel/preset-env",
+            { "targets": { "node": "current" } }
+        ]
+    ],
+    "plugins": [ "transform-es2015-modules-commonjs" ]
   }
 }

@@ -1,16 +1,15 @@
 
-// These tidbits CANNOT contain ANY dependencies! that's the whole point :-)
-
+// These tidbits CANNOT contain ANY dependencies: that's the whole point of this module :-)
 
 // helper
-const deepClone = obj => JSON.parse(JSON.stringify(obj));
+export const deepClone = obj => JSON.parse(JSON.stringify(obj));
 
 // prevent webpack/babel from removing async syntax (which neutralizes intended effect)
 // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
-const AsyncFunction = new Function(`return Object.getPrototypeOf(async function(){}).constructor`)();
+export const AsyncFunction = new Function(`return Object.getPrototypeOf(async function(){}).constructor`)();
 
 // utility (using es6 generators)
-function* genCombinations(options) {
+export function* genCombinations(options) {
 
     // options is an object where each property contains alternatives (an array)
     // cb will be called with ALL COMBINATIONS of these properties
@@ -34,7 +33,7 @@ function* genCombinations(options) {
 }
 
 // utility (using callback)
-function genCombinations_with_callback(options, cb) {
+export function genCombinations_with_callback(options, cb) {
 
     // options is an object where each property contains alternatives (an array)
     // cb will be called with ALL COMBINATIONS of these properties
@@ -52,11 +51,4 @@ function genCombinations_with_callback(options, cb) {
         delete otherProps[thisProp]; 
         propAlts.forEach(v => genCombos(otherProps, subAlts => cb(Object.assign({ [thisProp]: v }, subAlts))))
     }
-}
-
-module.exports = {
-    deepClone,
-    genCombinations,
-    genCombinations_with_callback,
-    AsyncFunction,
 }
