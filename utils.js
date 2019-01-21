@@ -1,5 +1,5 @@
 
-// These tidbits CANNOT contain ANY dependencies: that's the whole point of this module :-)
+// These tidbits CANNOT contain ANY dependencies: that's the whole point of this module :-) 
 
 // helper
 export const deepClone = obj => JSON.parse(JSON.stringify(obj));
