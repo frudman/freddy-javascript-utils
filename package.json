@@ -6,6 +6,7 @@
   "main": "utils.mjs",
   "aabrowser": "lib/umd/es6/index.min.js",
   "module": "utils.mjs",
+  "zztop": "utils.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "abuild": "rm -rf lib && webpack",

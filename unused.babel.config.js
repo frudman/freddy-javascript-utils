@@ -74,7 +74,7 @@ module.exports = function(api) {
 
         // // required to allow for [top-level?] async/await code (used by babel 7+)
         // // read: https://github.com/babel/babel-loader/issues/560#issuecomment-435479549
-        // "@babel/plugin-transform-runtime",
+         "@babel/plugin-transform-runtime",
     ]
 
     return { presets, plugins};
