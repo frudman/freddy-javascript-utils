@@ -77,5 +77,14 @@ module.exports = function(api) {
          "@babel/plugin-transform-runtime",
     ]
 
-    return { presets, plugins};
+    return { presets, plugins,
+        include(absPath) {
+            // included perefered over exclude (also, exclude takes priority if present)
+            // as per: https://medium.com/unhandled-exception/using-non-transpiled-modules-and-webpack-657dca27bd4a
+            const includeMe = !/node_modules/.test(absPath);
+            console.log('PROCx ', includeMe ? 'including':'excluding', absPath);
+            return includeMe;// true;
+        }
+
+    };
 }
