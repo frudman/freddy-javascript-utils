@@ -19,7 +19,7 @@ export const deepClone = obj => JSON.parse(JSON.stringify(obj));
 // a way to create a "seriously empty object" :-)
 export const createNullObject = () => Object.create(null);
 
-// prevent webpack/babel from removing async syntax (which neutralizes intended effect) when going ES5
+// prevent webpack/babel from removing async syntax (which would neutralize its intended effect) when going ES6->ES5
 // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
 export const AsyncFunction = new Function(`return Object.getPrototypeOf(async function(){}).constructor`)();
 
@@ -137,4 +137,3 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
 		request.send();
 	});
 }
-

@@ -2,15 +2,11 @@
   "name": "tidbits",
   "version": "1.0.18",
   "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
-  "mainxx": "lib/umd/es6/index.min.js",
   "main": "utils.mjs",
-  "aabrowser": "lib/umd/es6/index.min.js",
   "module": "utils.mjs",
-  "zztop": "utils.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "abuild": "rm -rf lib && webpack",
-    "pubxx": "npm run build && git add . && git commit -m 'working code' && npm version patch -m 'upgrade to %s while working code' && git push && npm publish",
+    "build": "echo 'this ES6 Module is a library/collection of one-off functions;\\nthere is NO BUILD STEP (this enables tree-shaking when individual functions are included)\\n'",
     "pub": "git add . && git commit -m 'working code' && npm version patch -m 'upgrade to %s while working code' && git push && npm publish"
   },
   "repository": {
@@ -27,19 +23,5 @@
   "bugs": {
     "url": "https://github.com/frudman/freddy-javascript-utils/issues"
   },
-  "homepage": "https://github.com/frudman/freddy-javascript-utils#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "@babel/runtime": "^7.3.1",
-    "babel-loader": "^8.0.5",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1"
-  }
+  "homepage": "https://github.com/frudman/freddy-javascript-utils#readme"
 }
