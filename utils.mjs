@@ -108,9 +108,11 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
 			if (request.status >= 200 && request.status < 300) {
                 // success
 				resolve({ 
-                    data: request.responseText,
+                    content: request.responseText,
+                    contentType: request.getResponseHeader('Content-Type'),
+
+                    // next one is useful to know final url in case of 30x redirects (as followed by browser)
                     responseURL: request.responseURL, // NOT SUPPORTED by IE
-                    dataType: request.getResponseHeader('Content-Type'),
                 });
 			} else if (request.status >= 500 && retry-- > 0) {
                 // server error: retry...
