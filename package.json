@@ -1,6 +1,6 @@
 {
   "name": "tidbits",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "a library of useful (?) \"out-of-the-beaten-path\" tidbits :-)",
   "main": "utils.mjs",
   "module": "utils.mjs",
