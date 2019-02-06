@@ -112,7 +112,8 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
                     contentType: request.getResponseHeader('Content-Type'),
 
                     // next one is useful to know final url in case of 30x redirects (as followed by browser)
-                    responseURL: request.responseURL, // NOT SUPPORTED by IE
+                    // see: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseURL
+                    responseURL: request.responseURL || url, // NOT SUPPORTED by IE so pass back initial requested url
                 });
 			} else if (request.status >= 500 && retry-- > 0) {
                 // server error: retry...
