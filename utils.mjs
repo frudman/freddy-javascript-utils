@@ -139,3 +139,16 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
 		request.send();
 	});
 }
+
+export function loadCSSCode(cssCode) {
+    const head = document.getElementsByTagName('head')[0];
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(cssCode));
+
+    // style attribute no longer needed in modern [html5] browsers
+    // as per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style
+    //style.setAttribute('type', 'text/css'); 
+
+    head.appendChild(style);
+}
+
