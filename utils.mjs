@@ -144,7 +144,6 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
 }
 
 export function loadCSSCode(cssCode) {
-    const head = document.getElementsByTagName('head')[0];
     const style = document.createElement('style');
     style.appendChild(document.createTextNode(cssCode));
 
@@ -152,7 +151,7 @@ export function loadCSSCode(cssCode) {
     // as per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style
     //style.setAttribute('type', 'text/css'); 
 
-    head.appendChild(style);
+    document.head.appendChild(style);
 }
 
 // allows us to create friendlier regexps (using spacing, including newlines, and ## end-of-line comments)
