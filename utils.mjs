@@ -125,10 +125,12 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
                 retryDelayInMS *= 2; // ...and progressively increase it for next go around
             } else { 
                 // client error (4xx) or too many retries or other non-retriable error
-                const err = new Error(`failed to ${method} ${url} [${retry <= 0 ? 'too many retries;' : ''}http-code=${request.status}${request.statusText ? `(${request.statusText})`:''}]`)
+                const code = (retry <= 0 ? 'too many retries;last-' : '') + `http-code=${request.status}${request.statusText ? `(${request.statusText})`:''}`;
+                const err = new Error(`failed to ${method} ${url} [${code}]`)
                 err.name = `HTTP-${method}-Error`;
                 err.statusCode = request.status;
                 err.statusText = request.statusText; 
+                err.code = code;
 				reject(err);
 			}
         };
@@ -152,4 +154,47 @@ export function loadCSSCode(cssCode) {
 
     head.appendChild(style);
 }
+
+// allows us to create friendlier regexps (using spacing, including newlines, and ## end-of-line comments)
+export const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
+
+/* 
+    1- we used the now-commented-out code below to generate our [complex] regular expressions
+    2- then we captured that outout (using the console.log statement)
+    3- then we used those generated regexps directly (cut-and-paste) to reduce final code/module size
+
+    FYI: can verify regular expressions here: https://www.regexpal.com/ and https://regex101.com/ 
+    FYI: [^] matches everything (including newlines): same as [/s/S]
+
+    ***** commented out code begins below: *****
+
+    // toRegEx uses '.{0,}/g' instead of 'dot-star-slash-gee' because dot-star-slash-gee would terminate this commented out code at slash-gee!
+    const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
+
+    const commentsPatSrc = toRegEx(`
+        ## must look for (and ignore) quoted strings because could contain text that looks like comments
+
+        ### quoted strings
+        (['"\`])                 ## start (opening quote); becomes ~1
+        (~~~1|(?:(?!~1)[^]))*?   ## quoted content (sans quotes); ~~~1 allows for embedded quotes
+        ~1                       ## end (same as opening quote)
+    |
+        ### comments
+        [/][/].*           ## end-of-line
+        |
+        [/][*][^]*?[*][/]  ## multiline
+    `, /[~]/g, 'g');
+
+    // OUR GENERATED REGULAR EXPRESSIONS (cut-and-pasted below)
+    // we're NOT concatenating the REs to string because the string-conversion of these REs
+    // display slightly different resulting REs ([\/] instead of just [/])
+    console.log('const commentsPat =' , commentsPatSrc, ';');
+*/            
+
+const commentsPat = /(['"`])(\\\1|(?:(?!\1)[^]))*?\1|[/][/].*|[/][*][^]*?[*][/]/g;
+
+export function stripComments(code) {
+    return code.replace(commentsPat, full => (full[0] === '/') ? (full[1] === '/' ? '' : /\n/.test(full) ? '\n' : ' ') : full);
+}
+
 
