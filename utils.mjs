@@ -154,8 +154,28 @@ export function loadCSSCode(cssCode) {
     document.head.appendChild(style);
 }
 
-// allows us to create friendlier regexps (using spacing, including newlines, and ## end-of-line comments)
-export const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
+// allows us to create friendlier multi-line regexps (using spacing, including newlines, and ## end-of-line comments)
+// uses 'bs' as substitute for BackSlash (\) to simplify string definitions (else would need to double-escape ALL backslashes)
+// bs must be specified as a GLOBAL regex (else only first occurence would be replaced)
+export const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/\s+[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
+
+/*
+    commented out until actually needed...
+
+    // as per: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
+    if (!RegExp.prototype.escape) // or use Object.defineProperty with enumerable: false, configurable: false (to prevent clashes)
+    RegExp.prototype.escape = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // function escapeRegExp(str) {
+    //     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+    // }
+
+    // then
+    if (!String.prototype.replaceAll) // or use Object.defineProperty with enumerable: false, configurable: false (to prevent clashes)
+    String.prototype.replaceAll = function(search, replacement) {
+        const target = this;
+        return target.replace(new RegExp(RegExp.escape(search), 'g'), replacement);
+    };
+*/
 
 /* 
     1- we used the now-commented-out code below to generate our [complex] regular expressions
@@ -167,8 +187,8 @@ export const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/[#]{2,}.{0,
 
     ***** commented out code begins below: *****
 
-    // toRegEx uses '.{0,}/g' instead of 'dot-star-slash-gee' because dot-star-slash-gee would terminate this commented out code at slash-gee!
-    const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
+    // toRegEx uses '.{0,}/g' instead of 'dot-star-slash-gee' because star-slash (of dot-star-slash-gee) would terminate this commented out code!
+    const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/\s+[#]{2,}.{0,}/g, '').replace(/\s+/g,'').replace(bs, '\\'), flags);
 
     const commentsPatSrc = toRegEx(`
         ## must look for (and ignore) quoted strings because could contain text that looks like comments
