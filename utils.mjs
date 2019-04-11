@@ -154,6 +154,13 @@ export function loadCSSCode(cssCode) {
     document.head.appendChild(style);
 }
 
+
+export function loadScript(url) { // should be part of loadModule, no?
+    const a = document.createElement('script'); 
+    a.src = url;
+    document.body.appendChild(a);
+}
+
 // allows us to create friendlier multi-line regexps (using spacing, including newlines, and ## end-of-line comments)
 // uses 'bs' as substitute for BackSlash (\) to simplify string definitions (else would need to double-escape ALL backslashes)
 // bs must be specified as a GLOBAL regex (else only first occurence would be replaced)
@@ -214,6 +221,12 @@ const commentsPat = /(['"`])(\\\1|(?:(?!\1)[^]))*?\1|[/][/].*|[/][*][^]*?[*][/]/
 
 export function stripComments(code) {
     return code.replace(commentsPat, full => (full[0] === '/') ? (full[1] === '/' ? '' : /\n/.test(full) ? '\n' : ' ') : full);
+}
+
+
+export function toQueryString(obj) {
+    const esc = encodeURIComponent, sep = '&', eq = '=';
+    return Object.entries(obj || {}).map(([k,v]) => esc(k) + eq + esc(v)).join(sep);
 }
 
 
