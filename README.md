@@ -12,3 +12,5 @@ a javascript library of useful (?) "out-of-the-beaten-path" tidbits :-)
 - IMPORTANT: you can enable TREE SHAKING by importing (in your app) only those methods you need
     - tree shaking means a good bundler (e.g. webpack) will NOT include any method here (i.e. export) 
       that is not explicitly imported in your app, thus reducing the code-size of your final (bundled) app
+
+- PUBLISH: `npm run pub`
