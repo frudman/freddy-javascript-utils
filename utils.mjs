@@ -280,12 +280,11 @@ export function genSortOfUUID(len = 5) {
     return [...array].map(n => n.toString(36)).join(''); // 36 as in base-36
 }
 
+// converts array of strings ['prop1','prop2','prop3=val',...] to object {prop1:'', prop2:'', prop3:'val', ...}
 export const arrayToObj = (() => { 
-    // converts array of strings ['prop1','prop2','prop3=val',...] to object {prop1:'', prop2:'', prop3:'val', ...}
     const split = itm => [ ...itm.split('='), '' ];
     return (...props) => props.map(p => split(p)).reduce((sofar,[p,v]) => (sofar[p] = v, sofar), {});
 })();
-
 
 // The maximum is exclusive and the minimum is inclusive
 export const random = (min,max) => Math.floor(Math.random() * (max - min)) + min; 
@@ -302,3 +301,5 @@ export const dialogWindowSettings = ({
 } = {}) => // also resizable & scrollbars
     Object.entries({width,height,menubar,toolbar,location,status,...rest}).map(([k,v]) => `${k}=${v}`).join(',');
 
+// get actual name of object's type (e.g. Array)
+export const nameOf = t => Object.prototype.toString.call(t).replace(/^\[object|]$|\s+/gi, '');
