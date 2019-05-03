@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/frudman/freddy-javascript-utils/issues"
   },
-  "homepage": "https://github.com/frudman/freddy-javascript-utils#readme"
+  "homepage": "https://github.com/frudman/freddy-javascript-utils#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/runtime": "^7.4.4"
+  }
 }

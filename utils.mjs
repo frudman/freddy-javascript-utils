@@ -1,17 +1,4 @@
 
-// These tidbits DO NOT contain ANY dependencies: that's the whole point of this module :-) 
-
-// These are useful lightweight(ish) methods that I find I use over and over again
-// ...or that I want kept somewhere for reference on how to do this or that...
-
-// EACH METHOD is self contained, so...
-// ...a fine way to use these functions is to simply cut-and-paste them into your code (use this repo as reference)
-
-// IMPORTANT: you can enable TREE SHAKING by importing (in your app) only those methods you need
-// - tree shaking means a good bundler (e.g. webpack) will NOT include any method here (i.e. export) 
-//   that is not explicitly imported in your app, thus reducing the code-size of your final (bundled) app
-
-
 // obvious helper
 // caveat: will FAIL with cyclical refs
 export const deepClone = obj => JSON.parse(JSON.stringify(obj));
@@ -80,7 +67,7 @@ export function genCombinations_with_callback(options, cb) {
     }
 }
 
-// a simple replacement for axios.get (less code since can't just get axios.get)
+// a minimal replacement for axios.get (less code since can't just get standalone axios.get)
 export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}) {
 
     // IMPORTANT:
@@ -143,24 +130,6 @@ export function http(url, {method = 'GET', retry = 3, retryDelayInMS = 500} = {}
 	});
 }
 
-export function loadCSSCode(cssCode) {
-    const style = document.createElement('style');
-    style.appendChild(document.createTextNode(cssCode));
-
-    // style attribute no longer needed in modern [html5] browsers
-    // as per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style
-    //style.setAttribute('type', 'text/css'); 
-
-    document.head.appendChild(style);
-}
-
-
-export function loadScript(url) { // should be part of loadModule, no?
-    const a = document.createElement('script'); 
-    a.src = url;
-    document.body.appendChild(a);
-}
-
 // allows us to create friendlier multi-line regexps (using spacing, including newlines, and ## end-of-line comments)
 // uses 'bs' as substitute for BackSlash (\) to simplify string definitions (else would need to double-escape ALL backslashes)
 // bs must be specified as a GLOBAL regex (else only first occurence would be replaced)
@@ -218,15 +187,118 @@ export const toRegEx = (srcRE,bs,flags) => new RegExp(srcRE.replace(/\s+[#]{2,}.
 */            
 
 const commentsPat = /(['"`])(\\\1|(?:(?!\1)[^]))*?\1|[/][/].*|[/][*][^]*?[*][/]/g;
-
 export function stripComments(code) {
     return code.replace(commentsPat, full => (full[0] === '/') ? (full[1] === '/' ? '' : /\n/.test(full) ? '\n' : ' ') : full);
 }
-
 
 export function toQueryString(obj) {
     const esc = encodeURIComponent, sep = '&', eq = '=';
     return Object.entries(obj || {}).map(([k,v]) => esc(k) + eq + esc(v)).join(sep);
 }
 
+export function loadCSSCode(cssCode) {
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(cssCode));
+
+    // style attribute no longer needed in modern [html5] browsers
+    // as per https://developer.mozilla.org/en-US/docs/Web/HTML/Element/style
+    //style.setAttribute('type', 'text/css'); 
+
+    document.head.appendChild(style);
+}
+
+
+export function loadScript(url, onload, onerror) { // should ALSO be part of loadModule, no?
+
+    const a = document.createElement('script'); 
+    a.src = url;
+
+    // todo: allow for an INTEGRITY attribute to verify loading of code (using sha-NNN signatures)
+    // - https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
+
+    // todo: consider adding CROSSORIGIN attribute as parameter
+    // read: https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes
+    //a.crossorigin = 'anonymous'; // or 'use-credentials'
+
+    onload && (a.onload = onload);
+    onerror && (a.onerror = evt => onerror(evt));
+    document.body.appendChild(a);
+}
+
+// read: https://github.com/Caligatio/jsSHA#hmac
+import SHA_256_ALGORITHM from './sha256.js'; 
+
+export function SHA256(content, hmacKey = false) { // content expected to be string (for now)
+    // to verify, use: https://www.freeformatter.com/hmac-generator.html
+    const sha = new SHA_256_ALGORITHM("SHA-256", "TEXT"); // todo: content COULD BE an array buffer (?) so test for it?
+    hmacKey && sha.setHMACKey(hmacKey, "TEXT"); // todo: key COULD BE an array buffer (?) so test for it?
+    sha.update(content);
+    return hmacKey ? sha.getHMAC('HEX') : sha.getHash('HEX');
+}
+
+export function SHA256_withUpdates(updateType = "TEXT", hmacKey = false) { // also "ARRAYBUFFER"
+
+    // to verify, use: https://www.freeformatter.com/hmac-generator.html
+    const sha = new SHA_256_ALGORITHM("SHA-256", updateType);
+    hmacKey && sha.setHMACKey(hmacKey, "TEXT"); // todo: key COULD BE an array buffer (?) so test for it?
+
+    return {
+        update(content) { sha.update(content); },
+        getHash(type = 'HEX') { return sha.getHash(type); },
+        getHMAC(type = 'HEX') { return sha.getHMAC(type); },
+    }
+}
+
+export function fmtDate(date, ...localeParms) {
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat
+    // also read: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+
+    // see: https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language
+    // - window.navigator.language || window.navigator.userLanguage || window.navigator.browserLanguage; 
+    // - (user|browser)Language for IE 11
+    //const wn = window.navigator || {};
+    //locale = [ wn.language || wn.userLanguage || wn.browserLanguage || 'en-US' ]; 
+    // if locale is empty, will use defaults for browser (language+timezone)
+
+    return new Intl.DateTimeFormat(...localeParms).format(date);
+}
+
+export function genSortOfUUID(len = 5) {
+
+    // this MUST be unique for all users from all browsers (at the time of request)
+    // - would be better to use a cookie but those can be manipulated
+    // - also better to get uid from server but would require 2 tx instead of one
+
+    // using CRYPTO: https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues
+    // - all recent-vintage browsers support this
+
+    const array = new Uint32Array(len); // each unit is 4 hex digits
+    window.crypto.getRandomValues(array); 
+
+    // below: using [...spread] technique because cannot use array.map() since that
+    // would return a Uint32Array (typed array) where all values would then be converted to 0
+    return [...array].map(n => n.toString(36)).join(''); // 36 as in base-36
+}
+
+export const arrayToObj = (() => { 
+    // converts array of strings ['prop1','prop2','prop3=val',...] to object {prop1:'', prop2:'', prop3:'val', ...}
+    const split = itm => [ ...itm.split('='), '' ];
+    return (...props) => props.map(p => split(p)).reduce((sofar,[p,v]) => (sofar[p] = v, sofar), {});
+})();
+
+
+// The maximum is exclusive and the minimum is inclusive
+export const random = (min,max) => Math.floor(Math.random() * (max - min)) + min; 
+
+// when opening new windows 
+export const dialogWindowSettings = ({
+    width = 620,
+    height = 550,
+    menubar = 'no',
+    toolbar = 'no',
+    location = 'no',
+    status = 'no',
+    ...rest
+} = {}) => // also resizable & scrollbars
+    Object.entries({width,height,menubar,toolbar,location,status,...rest}).map(([k,v]) => `${k}=${v}`).join(',');
 
